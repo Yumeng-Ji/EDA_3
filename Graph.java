@@ -9,12 +9,15 @@ public class Graph {
     String[] keys;
     ArrayList<Integer>[] adjList;
 
-    public void crearGrafo(UnorderedDoubleLinkedList<Autor> lista){
+    public void crearGrafo(ArrayList<Autor> lista){
         // Post: crea el grafo desde la lista de autores
         //       Los nodos son nombres de autores
 
         // Paso 1: llenar th�
         // COMPLETAR CÓDIGO
+        th = new HashMap<>();
+        for(int i = 0; i < lista.size(); i++)
+            th.put(lista.get(i).getNombre(), i);
 
         // Paso 2: llenar keys�
         keys = new String[th.size()];
@@ -22,6 +25,9 @@ public class Graph {
 
         // Paso 3: llenar adjList�
         // COMPLETAR CÓDIGO
+        adjList = new ArrayList[th.size()];
+        for (int i = 0; i < adjList.length; i++) adjList[i] = new ArrayList<>();
+        // Hay que asignar las relaciones de co-autor y de citas 
     }
 
     public void print(){
@@ -54,5 +60,6 @@ public class Graph {
         return null;
 
     }
+
 
 }
