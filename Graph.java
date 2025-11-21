@@ -72,12 +72,31 @@ public class Graph {
     }
 
     public boolean estanConectados(String a1, String a2){
+        if (!th.containsKey(a1) || !th.containsKey(a2)) return false;
         Queue<Integer> porExaminar = new LinkedList<Integer>();
 
         int pos1 = th.get(a1);
         int pos2 = th.get(a2);
         boolean enc = false;
         boolean[] examinados = new boolean[th.size()];
+        // Si son el mismo autor
+        if (pos1 == pos2) return true;
+
+        porExaminar.add(pos1);
+        examinados[pos1] = true;
+
+        while (!porExaminar.isEmpty() && !enc) {
+            int actual = porExaminar.poll();
+            for (int i : adjList[actual]) {
+                if (!examinados[i]) {
+                    if (i==pos2){
+                        enc = true;
+                    }
+                    examinados[i] = true;
+                    porExaminar.add(i);
+                }
+            }
+        }
 
         // COMPLETAR CÓDIGO
 
@@ -95,4 +114,5 @@ public class Graph {
 
 
 }
+
 
