@@ -12,14 +12,25 @@ public class Graph {
 
         // Paso 1: llenar th
         th = new HashMap<>();
-        for (int i = 0; i < lista.size(); i++) {
-            th.put(lista.get(i).getNombre(), i);
+        int index = 0;
+
+        // Autores con nombre válido
+        for (Autor autor : lista) {
+            if (autor.getNombre() != null && !autor.getNombre().trim().isEmpty()) {
+                if (!th.containsKey(autor.getNombre())) {
+                    th.put(autor.getNombre(), index);
+                    index++;
+                }
+            }
         }
 
         // Paso 2: llenar keys
         keys = new String[th.size()];
         for (String k : th.keySet()) {
-            keys[th.get(k)] = k;
+            int idx = th.get(k);
+            if (idx >= 0 && idx < keys.length) {
+                keys[idx] = k;
+            }
         }
 
         // Paso 3: llenar adjList
@@ -150,3 +161,4 @@ public class Graph {
     }
 
 }
+
