@@ -15,33 +15,53 @@ public class Graph {
 
         // Paso 1: llenar th
         // COMPLETAR CÓDIGO
-        int id = 0;
-        for (Autor autor : lista.getListaAutores().values())
-            th.put(autor.getNombre(), id++);
+        th = new HashMap<>();
+        for(int i = 0; i < lista.size(); i++)
+            th.put(lista.get(i).getNombre(), i);
 
-        // Paso 2: llenar keys
+
+        // Paso 2: llenar keys�
         keys = new String[th.size()];
-        for (String nombre : th.keySet())
-            keys[th.get(nombre)] = nombre;
+        for (String k: th.keySet()) keys[th.get(k)] = k;
 
-        // Paso 3: llenar adjList
-        // COMPLETAR CÓDIGO
-        adjList = (ArrayList<Integer>[]) new ArrayList[th.size()];
-        ArrayList<Integer> autoresPub = null;
-        for (Publicacion pub : lista.getListaPublicaciones().values()) {
-            autoresPub = new ArrayList<>();
-            for (Autor a : pub.getListaAutores()) {
-                if (th.containsKey(a.getNombre()))
-                    autoresPub.add(th.get(a.getNombre()));
-            }
-        }
-        // Añadir enlaces entre todos los autores de la publicación
-        for (int i = 0; i < autoresPub.size(); i++) {
-            for (int j = i + 1; j < autoresPub.size(); j++){
-                int x = autoresPub.get(i);
-                int y = autoresPub.get(j);
-                adjList[x].add(y);
-                adjList[y].add(x);
+        // Paso 3: llenar adjList�
+        // COMPLETAR C�DIGO
+        adjList = new ArrayList[th.size()];
+        for (int i = 0; i < adjList.length; i++) adjList[i] = new ArrayList<>();
+
+        // Construir relaciones basadas en co-autoría
+         HashMap<String, Autor> listaAutores= Repositorio.getRepositorio().getListaAutores();
+        for (Autor autor : lista) {
+            int indiceAutor = th.get(autor.getNombre());
+
+            // Obtener todas las publicaciones del autor
+            UnorderedDoubleLinkedList<Publicacion> publicaciones = autor.getListaPublicaciones();
+
+            // Para cada publicacion, obtener los co-autores
+            Iterator<Publicacion> pubIterator = publicaciones.iterator();
+            while (pubIterator.hasNext()) {
+                Publicacion pub = pubIterator.next();
+
+                UnorderedDoubleLinkedList<Autor> autoresPub = pub.getListaAutores();
+
+                // Crear conexiones entre todos los autores de esta publicacion
+                Iterator<Autor> autorIterator = autoresPub.iterator();
+                while (autorIterator.hasNext()) {
+                    Autor coAutor = autorIterator.next();
+                    if (!coAutor.getNombre().equals(autor.getNombre())) {// Verificar que no es el mismo autor
+                        if (th.containsKey(coAutor.getNombre())) { // Verificar que esta en la lista
+                        int indiceCoAutor = th.get(coAutor.getNombre());
+
+                            // Añadir conexion bidireccional
+                            if (!adjList[indiceAutor].contains(indiceCoAutor)) {
+                                adjList[indiceAutor].add(indiceCoAutor);
+                            }
+                            if (!adjList[indiceCoAutor].contains(indiceAutor)) {
+                                adjList[indiceCoAutor].add(indiceAutor);
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -139,4 +159,5 @@ public class Graph {
         }
 
 }
+
 
