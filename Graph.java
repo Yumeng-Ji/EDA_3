@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 public class Graph {
 
@@ -14,10 +11,9 @@ public class Graph {
         //       Los nodos son nombres de autores
 
         // Paso 1: llenar th
-        // COMPLETAR CÓDIGO
         th = new HashMap<>();
         for (int i = 0; i < lista.size(); i++) {
-            th.put(lista.get(i).getNombre(), i);
+            th.put(lista.get(i).getNombre(), i++);
         }
 
         // Paso 2: llenar keys
@@ -27,9 +23,8 @@ public class Graph {
         }
 
         // Paso 3: llenar adjList
-        // COMPLETAR CÓDIGO
         adjList = (ArrayList<Integer>[]) new ArrayList[th.size()];
-        for (int i = 0; i < adjList.length(); i++) {
+        for (int i = 0; i < adjList.length; i++) {
             adjList[i] = new ArrayList<>();
         }
         // Construir relaciones basadas en co-autoría
@@ -69,24 +64,26 @@ public class Graph {
     }
 
     public boolean estanConectados(String a1, String a2){
-        if (!th.containsKey(a1) || !th.containsKey(a2)) return false; //Verificar que estan en la lista
         Queue<Integer> porExaminar = new LinkedList<Integer>();
 
         int pos1 = th.get(a1);
         int pos2 = th.get(a2);
         boolean enc = false;
         boolean[] examinados = new boolean[th.size()];
+
         // Si son el mismo autor
-        if (pos1 == pos2) return true;
+        if (pos1 == pos2){
+            return true;
+        }
 
         porExaminar.add(pos1);
         examinados[pos1] = true;
 
-        while (!porExaminar.isEmpty() && !enc) {
-            int actual = porExaminar.poll();
+        while (!porExaminar.isEmpty() && !enc){
+            int actual = porExaminar.remove();
             for (int i : adjList[actual]) {
-                if (i==pos2){
-                    enc=true; // Encontrado
+                if (i == pos2) {
+                    enc = true; // Encontrado
                 }
                 if (!examinados[i]) {
                     examinados[i] = true;
@@ -94,21 +91,19 @@ public class Graph {
                 }
             }
         }
-
-        return enc; 
-
-
+        return enc;
     }
 
     public ArrayList<String> estanConectados(String a1, String a2){
 
-        
-        if (!th.containsKey(a1) || !th.containsKey(a2)) return null;
+        if (!th.containsKey(a1) || !th.containsKey(a2)){
+            return null;
+        }
         int pos1 = th.get(a1);
         int pos2 = th.get(a2);
-        ArrayList<String> camino= new ArrayList<>();
+        ArrayList<String> camino = new ArrayList<>();
         // Si son el mismo autor
-        if (pos1 == pos2) {
+        if (pos1 == pos2){
             camino.add(keys[pos1]);
             return camino;
         }
@@ -137,23 +132,18 @@ public class Graph {
                 }
             }
         }
-            if (!enc) return null;// No hay camino
+        if (!enc) return null;// No hay camino
 
-            Stack<String> pila = new Stack<>();
-            int aux = pos2;
-            while(aux!=-1){
-                pila.push(keys[aux]);
-                aux = backPos[aux];
-            }
-            while (!pila.isEmpty()){
-                camino.add(pila.pop());
-            }
-            return camino;
+        Stack<String> pila = new Stack<>();
+        int aux = pos2;
+        while(aux!=-1){
+            pila.push(keys[aux]);
+            aux = backPos[aux];
         }
+        while (!pila.isEmpty()){
+            camino.add(pila.pop());
+        }
+        return camino;
+    }
 
 }
-
-
-
-
-
