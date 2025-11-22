@@ -13,7 +13,7 @@ public class Graph {
         // Paso 1: llenar th
         th = new HashMap<>();
         for (int i = 0; i < lista.size(); i++) {
-            th.put(lista.get(i).getNombre(), i++);
+            th.put(lista.get(i).getNombre(), i);
         }
 
         // Paso 2: llenar keys
@@ -99,14 +99,17 @@ public class Graph {
         if (!th.containsKey(a1) || !th.containsKey(a2)){
             return null;
         }
+
         int pos1 = th.get(a1);
         int pos2 = th.get(a2);
         ArrayList<String> camino = new ArrayList<>();
+
         // Si son el mismo autor
         if (pos1 == pos2){
             camino.add(keys[pos1]);
             return camino;
         }
+
         Queue<Integer> porExaminar = new LinkedList<>();
         boolean[] examinados = new boolean[th.size()];
         int[] backPos = new int[th.size()];
@@ -136,7 +139,7 @@ public class Graph {
 
         Stack<String> pila = new Stack<>();
         int aux = pos2;
-        while(aux!=-1){
+        while(aux != -1){
             pila.push(keys[aux]);
             aux = backPos[aux];
         }
