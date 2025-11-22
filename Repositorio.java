@@ -1,9 +1,12 @@
 import java.io.*;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Scanner;
+import java.util.HashMap;
+import java.util.ArrayList;
 
 public class Repositorio {
     private static Repositorio miRepositorio = null;
-    private HashMap<String,Autor> listaAutores;
+    private HashMap<String, Autor> listaAutores;
     private HashMap<String, Publicacion> listaPublicaciones;
 
     private Repositorio() {
@@ -111,6 +114,7 @@ public class Repositorio {
         if (pub == null) {
             return " No se encontró la publicación con id " + idPub;
         }
+
         return "Publicación encontrada: " + pub.getTitulo();
     }
 
@@ -156,108 +160,98 @@ public class Repositorio {
     }
 
     //Dada una publicación (identificador), devolver una lista con las publicaciones que cita
-    public UnorderedDoubleLinkedList<Publicacion> getCitasDePublicacion(String idPublicacion){
+    public HashSet<Publicacion> getCitasDePublicacion(String idPublicacion){
         Publicacion pub = buscarPublicacionPorId(idPublicacion);
         if(pub == null){
-            return new UnorderedDoubleLinkedList<>();
+            return new HashSet<>();
         }
         return pub.getListaCitadas();
     }
 
-    public String imprimirCitasDePublicacion(String idPublicacion) {
+    public String ImprimirCitasDePublicacion(String idPublicacion) {
         Publicacion pub = buscarPublicacionPorId(idPublicacion);
 
         if (pub == null) {
             return "No existe la publicación con id " + idPublicacion;
         }
-        UnorderedDoubleLinkedList<Publicacion> citas = pub.getListaCitadas();
+        HashSet<Publicacion> citas = pub.getListaCitadas();
         if (citas.isEmpty()) {
             return "(No cita a ninguna publicación)";
         }
         StringBuilder sb = new StringBuilder();
         sb.append("Publicaciones citadas por ").append(idPublicacion).append(":\n");
-        Iterator<Publicacion> it = citas.iterator();
-        while (it.hasNext()) {
-            Publicacion p = it.next();
+        for (Publicacion p : citas) {
             sb.append(" - ").append(p.getId()).append(" # ").append(p.getTitulo()).append("\n");
         }
         return sb.toString();
     }
 
     //Dada una publicación, devolver una lista con sus autores
-    public UnorderedDoubleLinkedList<Autor> getAutoresDePublicacion(String idPublicacion){
+    public HashSet<Autor> getAutoresDePublicacion(String idPublicacion){
         Publicacion pub = buscarPublicacionPorId(idPublicacion);
         if(pub == null){  //si no existe la publicación, devolvemos la lista vacía
-            return new UnorderedDoubleLinkedList<>();
+            return new HashSet<>();
         }
         return pub.getListaAutores();
     }
 
     //Dado un autor, devolver una lista con sus publicaciones
-    public UnorderedDoubleLinkedList<Publicacion> getPublicacionesDeAutor(String idAutor){
+    public HashSet<Publicacion> getPublicacionesDeAutor(String idAutor){
         Autor autor = listaAutores.get(idAutor);
         if(autor == null){
-            return new UnorderedDoubleLinkedList<>();
+            return new HashSet<>();
         }
         return autor.getListaPublicaciones();
     }
 
-    public String imprimirAutoresDePublicacion(String idPublicacion) {
+    public String ImprimirAutoresDePublicacion(String idPublicacion) {
         Publicacion pub = buscarPublicacionPorId(idPublicacion);
 
         if (pub == null) {
             return "No existe la publicación con id " + idPublicacion;
         }
 
-        UnorderedDoubleLinkedList<Autor> autores = pub.getListaAutores();
+        HashSet<Autor> autores = pub.getListaAutores();
         if (autores.isEmpty()) {
             return "(No tiene autores asociados)";
         }
 
         StringBuilder sb = new StringBuilder();
         sb.append("Autores de la publicación ").append(idPublicacion).append(":\n");
-        Iterator<Autor> it = autores.iterator();
-        while (it.hasNext()) {
-            Autor a = it.next();
+        for (Autor a : autores) {
             sb.append(" - ").append(a.getId()).append(" # ").append(a.getNombre()).append("\n");
         }
+
         return sb.toString();
     }
 
-    public String imprimirPublicacionesDeAutor(String idAutor) {
+    public String ImprimirPublicacionesDeAutor(String idAutor) {
         Autor autor = listaAutores.get(idAutor);
 
         if (autor == null) {
             return "El autor " + idAutor + " no existe.";
         }
 
-        UnorderedDoubleLinkedList<Publicacion> pubs = autor.getListaPublicaciones();
+        HashSet<Publicacion> pubs = autor.getListaPublicaciones();
         if (pubs.isEmpty()) {
             return "(El autor no tiene publicaciones)";
         }
 
         StringBuilder sb = new StringBuilder();
         sb.append("Publicaciones del autor ").append(idAutor).append(":\n");
-        Iterator<Publicacion> it = pubs.iterator();
-        while (it.hasNext())
-        {
-            Publicacion p = it.next();
+        for (Publicacion p : pubs) {
             sb.append(" - ").append(p.getId()).append(" # ").append(p.getTitulo()).append("\n");
         }
 
         return sb.toString();
     }
 
-
-    public void borrarPublicacion(Publicacion pub){
+    private void borrarPublicacion(Publicacion pub){
         if(pub == null){
             return;
         }
         //Borrarla de los autores que la referencian
-        UnorderedDoubleLinkedList<Autor> autores = pub.getListaAutores();
-        Iterator<Autor> itAutores = autores.iterator();
-        while (itAutores.hasNext()) {
-            Autor autor = itAutores.next();
+        for(Autor autor: pub.getListaAutores()){
             autor.getListaPublicaciones().remove(pub);
         }
         //Borrarla de las citas de otras publicaciones
@@ -270,13 +264,12 @@ public class Repositorio {
 
     public String borrarPublicacionPorId(String idPub) {
         Publicacion pub = listaPublicaciones.get(idPub);
-
         if (pub == null) {
             return "La publicación " + idPub + " no existe.";
+        }else {
+            borrarPublicacion(pub);
+            return "Publicación " + idPub + " eliminada. Total publicaciones: " + tamañoHashPublicacion();
         }
-
-        borrarPublicacion(pub);
-        return "Publicación " + idPub + " eliminada. Total publicaciones: " + tamañoHashPublicacion();
     }
 
     public void borrarAutor(Autor autor){
@@ -284,10 +277,7 @@ public class Repositorio {
             return;
         }
         //Borrarlo de las publicaciones en las que aparezca
-        UnorderedDoubleLinkedList<Publicacion> publicaciones = autor.getListaPublicaciones();
-        Iterator<Publicacion> itPublicaciones = publicaciones.iterator();
-        while (itPublicaciones.hasNext()) {
-            Publicacion pub = itPublicaciones.next();
+        for(Publicacion pub: autor.getListaPublicaciones()){
             pub.getListaAutores().remove(autor);
         }
         //Borrarlo del repositorio
@@ -320,19 +310,18 @@ public class Repositorio {
     }
 
     public String[] publicacionesOrdenadas() {
-        OrderedDoubleLinkedList<String> listaTitulos = new OrderedDoubleLinkedList<>();
+        // 1. Sacar los títulos directamente del HashMap de publicaciones
+        ArrayList<String> listaTitulos = new ArrayList<>();
         System.out.println(this.tamañoHashPublicacion());
         for (Publicacion p : this.listaPublicaciones.values()) {
             //System.out.println("ID: " + p.getId()  + "  Título: [" + p.getTitulo() + "]");
             listaTitulos.add(p.getTitulo());
         }
-
-        String[] lista = new String[listaTitulos.size()];
-        Iterator<String> it = listaTitulos.iterator();
-        int i =0;
-        while(it.hasNext()){
-            lista[i++] = it.next();
-        }
+        // 2. Convertir a array
+        String[] lista = listaTitulos.toArray(new String[0]);
+        // 3. Ordenar con quickSort
+        quickSort(lista, 0, lista.length - 1);
+        // 4. Devolver
         return lista;
     }
 
@@ -346,5 +335,40 @@ public class Repositorio {
             sb.append(i).append(": ").append(lista[i]).append("\n");
         }
         return sb.toString();
+    }
+
+    private void quickSort(String[] lista, int inicio, int fin) {
+        if (inicio < fin) {
+            int indiceParticion = particion(lista, inicio, fin);
+            quickSort(lista, inicio, indiceParticion - 1);
+            quickSort(lista, indiceParticion, fin);
+        }
+    }
+
+    private int particion(String[] lista, int inicio, int fin) {
+        String pivote = lista[(inicio + fin) / 2];
+        int izq = inicio;
+        int der = fin;
+        while (izq <= der) {
+            while (lista[izq].compareTo(pivote) < 0) {
+                izq++;
+            }
+            while (lista[der].compareTo(pivote) > 0) {
+                der--;
+            }
+            if (izq <= der) {
+                swap(lista, izq, der);
+                izq++;
+                der--;
+            }
+        }
+        return izq;
+    }
+
+    private void swap(String[] lista, int izq, int der) {
+        // intercambia dos elementos del array usando una variable temporal
+        String temp = lista[izq];
+        lista[izq] = lista[der];
+        lista[der] = temp;
     }
 }

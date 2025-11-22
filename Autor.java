@@ -4,12 +4,12 @@ import java.io.*;
 public class Autor {
     private String id;
     private String nombre;
-    private UnorderedDoubleLinkedList<Publicacion> listaPublicaciones;
+    private HashSet<Publicacion> listaPublicaciones;
 
     public Autor(String pId, String pNombre) {
         this.id = pId;
         this.nombre = pNombre;
-        this.listaPublicaciones = new UnorderedDoubleLinkedList<Publicacion>();
+        this.listaPublicaciones = new HashSet<Publicacion>();
     }
 
     public String getId() {
@@ -20,12 +20,12 @@ public class Autor {
         return this.nombre;
     }
 
-    public UnorderedDoubleLinkedList<Publicacion> getListaPublicaciones() {
+    public HashSet<Publicacion> getListaPublicaciones() {
         return this.listaPublicaciones;
     }
 
     public void addPublicacion(Publicacion publicacion) {
-        listaPublicaciones.addToRear(publicacion);
+        listaPublicaciones.add(publicacion);
     }
 
 }

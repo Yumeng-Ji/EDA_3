@@ -1,6 +1,3 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,16 +8,16 @@ public class Main {
         long inicio = System.currentTimeMillis();
 
         //Cargar datos
-        Repositorio.getRepositorio().cargarAutor("C:\\Users\\Yu Meng Ji\\IdeaProjects\\EDA\\src\\Datuak\\authors-name-all.txt");
+        Repositorio.getRepositorio().cargarAutor("C:\\Users\\UPV\\IdeaProjects\\EDA Project 2.0\\out\\production\\EDA Project 2.0\\WikidataBeta\\authors-name-all.txt");
         System.out.println("Los datos se han cargado. Se han cargado " + Repositorio.getRepositorio().tamañoHashAutor() + " autores desde el archivo.");
         System.out.println("");
 
-        Repositorio.getRepositorio().cargarPublicacion("C:\\Users\\Yu Meng Ji\\IdeaProjects\\EDA\\src\\Datuak\\publications-titles-all.txt");
+        Repositorio.getRepositorio().cargarPublicacion("C:\\Users\\UPV\\IdeaProjects\\EDA Project 2.0\\out\\production\\EDA Project 2.0\\WikidataBeta\\publications-titles-all.txt");
         System.out.println("Los datos se han cargado. Se han cargado " + Repositorio.getRepositorio().tamañoHashPublicacion() + " publicaciones desde el archivo.");
         System.out.println("");
 
-        Repositorio.getRepositorio().cargarPublicacionesAutores("C:\\Users\\Yu Meng Ji\\IdeaProjects\\EDA\\src\\Datuak\\publications-authors-all-final.txt");
-        Repositorio.getRepositorio().cargarCitas("C:\\Users\\Yu Meng Ji\\IdeaProjects\\EDA\\src\\Datuak\\publications-citedPubs-all.txt");
+        Repositorio.getRepositorio().cargarPublicacionesAutores("C:\\Users\\UPV\\IdeaProjects\\EDA Project 2.0\\out\\production\\EDA Project 2.0\\WikidataBeta\\publications-authors-all-final.txt");
+        Repositorio.getRepositorio().cargarCitas("C:\\Users\\UPV\\IdeaProjects\\EDA Project 2.0\\out\\production\\EDA Project 2.0\\WikidataBeta\\publications-citedPubs-all.txt");
         System.out.println("Se han cargado las relaciones de autores y citas.");
 
         //Buscar una publicación dado su id
@@ -53,13 +50,13 @@ public class Main {
         System.out.println("El autor Q13579246 se ha asociado a la publicación Q12345678.");
 
         //Dada una publicacion, devolver una lista con las publicaciones que cita
-        System.out.println(Repositorio.getRepositorio().imprimirCitasDePublicacion("Q12345678"));
+        System.out.println(Repositorio.getRepositorio().ImprimirCitasDePublicacion("Q12345678"));
 
         //Dada una publicacion, devolver una lista con sus autores
-        System.out.println(Repositorio.getRepositorio().imprimirAutoresDePublicacion("Q12345678"));
+        System.out.println(Repositorio.getRepositorio().ImprimirAutoresDePublicacion("Q12345678"));
 
         //Dado un autor, devolver una lista con sus publicaciones
-        System.out.println(Repositorio.getRepositorio().imprimirPublicacionesDeAutor("Q13579246"));
+        System.out.println(Repositorio.getRepositorio().ImprimirPublicacionesDeAutor("Q13579246"));
 
         //Borrar un autor
         System.out.println(Repositorio.getRepositorio().borrarAutorPorId("Q13579246"));
@@ -73,8 +70,8 @@ public class Main {
 
         //Escribir los datos en archivos
         System.out.println("Finalmente, escribiremos todos los datos en nuevos archivos.");
-        Repositorio.getRepositorio().guardarAutores("C:\\Users\\Yu Meng Ji\\IdeaProjects\\EDA\\src\\Datuak\\salida-autores-all.txt");
-        Repositorio.getRepositorio().guardarPublicaciones("C:\\Users\\Yu Meng Ji\\IdeaProjects\\EDA\\src\\Datuak\\salida-publicaciones-all.txt");
+        Repositorio.getRepositorio().guardarAutores("C:\\Users\\UPV\\IdeaProjects\\EDA Project 2.0\\out\\production\\EDA Project 2.0\\WikidataBeta\\salida-autores-all.txt");
+        Repositorio.getRepositorio().guardarPublicaciones("C:\\Users\\UPV\\IdeaProjects\\EDA Project 2.0\\out\\production\\EDA Project 2.0\\WikidataBeta\\salida-publicaciones-all.txt");
         System.out.println("Archivos de salida generados correctamente.");
 
         //Calcular tiempo
