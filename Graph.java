@@ -17,7 +17,7 @@ public class Graph {
         // COMPLETAR CÓDIGO
         th = new HashMap<>();
         for (int i = 0; i < lista.size(); i++) {
-            th.put(lista.get(i).getNombre(), i++);
+            th.put(lista.get(i).getNombre(), i);
         }
 
         // Paso 2: llenar keys
@@ -152,6 +152,7 @@ public class Graph {
         }
 
 }
+
 
 
 
