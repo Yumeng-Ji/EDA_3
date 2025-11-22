@@ -9,7 +9,7 @@ public class Graph {
     String[] keys;
     ArrayList<Integer>[] adjList;
 
-    public void crearGrafo(Repositorio lista) {
+    public void crearGrafo(Arraylist<Autor> lista) {
         // Post: crea el grafo desde la lista de autores
         //       Los nodos son nombres de autores
 
@@ -159,5 +159,6 @@ public class Graph {
         }
 
 }
+
 
 
